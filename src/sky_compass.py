@@ -210,5 +210,5 @@ def generate_compass_report(
         lines.append(sentence)
 
     lines.append("")
-    lines.append("📡 Look up and enjoy the sky!")
+    lines.append("Look up and enjoy the sky!")
     return "\n".join(lines)
