@@ -5,6 +5,7 @@ Writes a self-contained HTML file (Leaflet via CDN) on each poll cycle,
 showing the target airport, tracking-radius circle, and live aircraft markers.
 """
 
+import html
 import json
 from pathlib import Path
 
@@ -66,14 +67,18 @@ def render_live_map_html(
         "flights": markers,
         "timestamp": timestamp,
     }
-    config_json = json.dumps(config)
+    config_json = (
+        json.dumps(config).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+    )
+
+    safe_airport_name = html.escape(airport_name)
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="refresh" content="{refresh_seconds}">
-  <title>aero-prox live map — {airport_name}</title>
+  <title>aero-prox live map — {safe_airport_name}</title>
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
